@@ -149,6 +149,30 @@ export interface WishlistDetail extends Wishlist {
   items: WishlistItem[];
 }
 
+export interface EnrichmentStats {
+  total_books: number;
+  with_isbn: number;
+  with_height: number;
+  with_description: number;
+  with_cover: number;
+  completeness_pct: number;
+}
+
+export interface EnrichmentProposal {
+  book_id: number;
+  isbn: string;
+  title: string;
+  proposals: Record<string, { current: unknown; proposed: unknown; source: string }>;
+}
+
+export interface EnrichmentResults {
+  total: number;
+  enriched: number;
+  failed: number;
+  skipped: number;
+  proposals: EnrichmentProposal[];
+}
+
 export interface OptimizeResult {
   assignments: { copy_id: number; shelf_id: number; position: number; book_title: string }[];
   unassigned_count: number;
@@ -208,4 +232,19 @@ export const api = {
   // Optimizer
   optimize: (data?: { sort_order?: string; include_long_term_storage?: boolean }) =>
     request<OptimizeResult>('/optimizer/optimize', { method: 'POST', body: JSON.stringify(data || {}) }),
+
+  // Photobooth
+  processPhotobooth: (formData: FormData) => {
+    // Don't set Content-Type header - let browser set multipart boundary
+    return fetch(`${API_BASE}/photobooth/process`, { method: 'POST', body: formData })
+      .then(res => { if (!res.ok) throw new Error(`API error: ${res.status}`); return res.json(); });
+  },
+
+  // Enrichment
+  getEnrichmentStats: () => request<EnrichmentStats>('/photobooth/enrichment/stats'),
+  getEnrichmentStatus: () => request<{ running: boolean; progress: number; total: number; has_results: boolean }>('/photobooth/enrichment/status'),
+  startEnrichment: () => request<{ status: string }>('/photobooth/enrichment/start', { method: 'POST' }),
+  getEnrichmentResults: () => request<EnrichmentResults>('/photobooth/enrichment/results'),
+  applyEnrichment: (bookId: number, acceptedFields: Record<string, unknown>) =>
+    request<{ status: string }>('/photobooth/enrichment/apply', { method: 'POST', body: JSON.stringify({ book_id: bookId, accepted_fields: acceptedFields }) }),
 };

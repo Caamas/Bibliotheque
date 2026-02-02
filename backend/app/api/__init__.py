@@ -6,6 +6,7 @@ from app.api.lending import router as lending_router
 from app.api.wishlist import router as wishlist_router
 from app.api.scanner import router as scanner_router
 from app.api.optimizer import router as optimizer_router
+from app.api.photobooth import router as photobooth_router
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(books_router)
@@ -14,3 +15,4 @@ api_router.include_router(lending_router)
 api_router.include_router(wishlist_router)
 api_router.include_router(scanner_router)
 api_router.include_router(optimizer_router)
+api_router.include_router(photobooth_router)

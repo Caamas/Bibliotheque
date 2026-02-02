@@ -1,8 +1,10 @@
 FROM python:3.11-slim
 
-# System dependencies for pyzbar (barcode reading)
+# System dependencies for pyzbar (barcode), OpenCV, and EasyOCR
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libzbar0 \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

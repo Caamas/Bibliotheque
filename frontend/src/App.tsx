@@ -1,20 +1,24 @@
 import { Routes, Route, NavLink } from 'react-router-dom'
-import { BookOpen, ScanBarcode, BookMarked, Handshake, LayoutGrid, Sparkles } from 'lucide-react'
+import { BookOpen, ScanBarcode, BookMarked, Handshake, LayoutGrid, Sparkles, Camera, Download } from 'lucide-react'
 import Library from './pages/Library'
 import Scanner from './pages/Scanner'
 import Shelves from './pages/Shelves'
 import Lendings from './pages/Lendings'
 import Wishlists from './pages/Wishlists'
 import Optimizer from './pages/Optimizer'
+import PhotoBooth from './pages/PhotoBooth'
+import Enrichment from './pages/Enrichment'
 import BookDetail from './pages/BookDetail'
 import SharedWishlist from './pages/SharedWishlist'
 
 const navItems = [
   { to: '/', icon: BookOpen, label: 'Library' },
+  { to: '/photobooth', icon: Camera, label: 'Booth' },
   { to: '/scan', icon: ScanBarcode, label: 'Scan' },
   { to: '/shelves', icon: LayoutGrid, label: 'Shelves' },
   { to: '/lendings', icon: Handshake, label: 'Lent' },
   { to: '/wishlists', icon: BookMarked, label: 'Wishlist' },
+  { to: '/enrichment', icon: Download, label: 'Enrich' },
   { to: '/optimizer', icon: Sparkles, label: 'Optimize' },
 ]
 
@@ -29,6 +33,8 @@ export default function App() {
           <Route path="/lendings" element={<Lendings />} />
           <Route path="/wishlists" element={<Wishlists />} />
           <Route path="/optimizer" element={<Optimizer />} />
+          <Route path="/photobooth" element={<PhotoBooth />} />
+          <Route path="/enrichment" element={<Enrichment />} />
           <Route path="/book/:id" element={<BookDetail />} />
           <Route path="/wishlist/share/:token" element={<SharedWishlist />} />
         </Routes>

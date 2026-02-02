@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420 297">
+  <!-- Bibliotheque Calibration Mat - Print at 100% on A3 -->
+  <!-- Markers: DICT_4X4_50, Size: 40mm -->
+  <!-- VERIFY: Each marker should measure exactly 40mm with a ruler -->
+
+  <!-- Background -->
+  <rect width="420" height="297" fill="#1a3a2a"/>
+
+  <!-- Book placement guide -->
+  <rect x="80" y="60" width="260" height="177" fill="none" stroke="#2a5a3a" stroke-width="0.5" stroke-dasharray="5,5"/>
+  <text x="210.0" y="148.5" text-anchor="middle" fill="#2a5a3a" font-size="8" font-family="sans-serif">PLACE BOOK HERE</text>
+
+  <!-- Marker 0 at (40, 40) -->
+  <rect x="20.0" y="20.0" width="40" height="40" fill="#ffffff"/>
+  <rect x="20.00" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="26.67" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="33.33" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="40.00" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="46.67" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="26.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="46.67" y="26.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="26.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="33.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="33.33" y="33.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="33.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="40.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="26.67" y="40.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="40.00" y="40.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="40.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="46.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="33.33" y="46.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="40.00" y="46.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="46.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="26.67" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="33.33" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="40.00" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="46.67" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <text x="40" y="68.0" text-anchor="middle" fill="#4a7a5a" font-size="5" font-family="monospace">ID:0</text>
+
+  <!-- Marker 1 at (380, 40) -->
+  <rect x="360.0" y="20.0" width="40" height="40" fill="#ffffff"/>
+  <rect x="360.00" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="366.67" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="373.33" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="380.00" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="386.67" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="20.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="26.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="380.00" y="26.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="26.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="33.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="366.67" y="33.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="386.67" y="33.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="33.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="40.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="373.33" y="40.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="380.00" y="40.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="40.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="46.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="366.67" y="46.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="46.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="366.67" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="373.33" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="380.00" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="386.67" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="53.33" width="6.67" height="6.67" fill="#000000"/>
+  <text x="380" y="68.0" text-anchor="middle" fill="#4a7a5a" font-size="5" font-family="monospace">ID:1</text>
+
+  <!-- Marker 2 at (380, 257) -->
+  <rect x="360.0" y="237.0" width="40" height="40" fill="#ffffff"/>
+  <rect x="360.00" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="366.67" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="373.33" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="380.00" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="386.67" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="243.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="366.67" y="243.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="243.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="250.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="250.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="257.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="373.33" y="257.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="380.00" y="257.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="386.67" y="257.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="257.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="263.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="366.67" y="263.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="380.00" y="263.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="263.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="360.00" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="366.67" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="373.33" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="380.00" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="386.67" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="393.33" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <text x="380" y="285.0" text-anchor="middle" fill="#4a7a5a" font-size="5" font-family="monospace">ID:2</text>
+
+  <!-- Marker 3 at (40, 257) -->
+  <rect x="20.0" y="237.0" width="40" height="40" fill="#ffffff"/>
+  <rect x="20.00" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="26.67" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="33.33" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="40.00" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="46.67" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="237.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="243.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="26.67" y="243.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="40.00" y="243.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="46.67" y="243.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="243.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="250.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="26.67" y="250.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="250.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="257.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="46.67" y="257.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="257.00" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="263.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="40.00" y="263.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="46.67" y="263.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="263.67" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="20.00" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="26.67" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="33.33" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="40.00" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="46.67" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <rect x="53.33" y="270.33" width="6.67" height="6.67" fill="#000000"/>
+  <text x="40" y="285.0" text-anchor="middle" fill="#4a7a5a" font-size="5" font-family="monospace">ID:3</text>
+
+  <!-- Measurement reference -->
+  <text x="210.0" y="12" text-anchor="middle" fill="#4a7a5a" font-size="6" font-family="monospace">Bibliotheque Calibration Mat - 420x297mm (A3) - Marker size: 40mm</text>
+
+  <!-- Scale verification rulers (10mm marks) -->
+  <line x1="10" y1="287" x2="60" y2="287" stroke="#4a7a5a" stroke-width="0.3"/>
+  <line x1="10" y1="285" x2="10" y2="289" stroke="#4a7a5a" stroke-width="0.3"/>
+  <text x="10" y="283" text-anchor="middle" fill="#4a7a5a" font-size="3" font-family="monospace">0mm</text>
+  <line x1="20" y1="285" x2="20" y2="289" stroke="#4a7a5a" stroke-width="0.3"/>
+  <line x1="30" y1="285" x2="30" y2="289" stroke="#4a7a5a" stroke-width="0.3"/>
+  <text x="30" y="283" text-anchor="middle" fill="#4a7a5a" font-size="3" font-family="monospace">20mm</text>
+  <line x1="40" y1="285" x2="40" y2="289" stroke="#4a7a5a" stroke-width="0.3"/>
+  <line x1="50" y1="285" x2="50" y2="289" stroke="#4a7a5a" stroke-width="0.3"/>
+  <text x="50" y="283" text-anchor="middle" fill="#4a7a5a" font-size="3" font-family="monospace">40mm</text>
+  <line x1="60" y1="285" x2="60" y2="289" stroke="#4a7a5a" stroke-width="0.3"/>
+</svg>
