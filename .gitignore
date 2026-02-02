@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.db
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+
+# Uploads (user data)
+backend/uploads/covers/*
+backend/uploads/signatures/*
+backend/uploads/shelves/*
+!backend/uploads/*/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
