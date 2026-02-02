@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import String, Integer, Float, DateTime, ForeignKey
+from sqlalchemy import String, Integer, Float, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -39,6 +39,11 @@ class Shelf(Base):
     usable_height_mm: Mapped[float] = mapped_column(Float)
     usable_width_mm: Mapped[float] = mapped_column(Float)
     usable_depth_mm: Mapped[Optional[float]] = mapped_column(Float)
+    double_row: Mapped[bool] = mapped_column(Boolean, default=False)
+    # If double_row, how much width is usable for the back row.
+    # Typically same as usable_width_mm, but can differ if the shelf
+    # is obstructed on one side.
+    back_row_width_mm: Mapped[Optional[float]] = mapped_column(Float)
     photo: Mapped[Optional[str]] = mapped_column(String(500))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 

@@ -79,6 +79,9 @@ async def run_optimization(
             usable_height_mm=shelf.usable_height_mm,
             usable_width_mm=shelf.usable_width_mm,
             adjustable=shelf.bookcase.adjustable_shelves if shelf.bookcase else True,
+            double_row=shelf.double_row,
+            back_row_width_mm=shelf.back_row_width_mm or shelf.usable_width_mm,
+            usable_depth_mm=shelf.usable_depth_mm or 0,
         )
         for shelf in shelves
     ]
@@ -103,6 +106,7 @@ async def run_optimization(
                 shelf_id=a.shelf_id,
                 position=a.position,
                 book_title=a.book_title,
+                layer=a.layer,
             )
             for a in result.assignments
         ],
@@ -143,6 +147,7 @@ async def apply_optimization(
         if copy:
             copy.shelf_id = assignment.shelf_id
             copy.shelf_position = assignment.position
+            copy.shelf_layer = assignment.layer
 
     await db.flush()
     return {"applied": len(assignments)}

@@ -57,6 +57,9 @@ class ShelfForOptimizer:
     usable_height_mm: float
     usable_width_mm: float
     adjustable: bool = True
+    double_row: bool = False
+    back_row_width_mm: float = 0  # 0 means same as usable_width_mm
+    usable_depth_mm: float = 0
 
 
 @dataclass
@@ -66,6 +69,7 @@ class ShelfAssignment:
     shelf_id: int
     position: int
     book_title: str
+    layer: str = "front"  # "front" or "back"
 
 
 @dataclass
@@ -193,8 +197,14 @@ def optimize_shelves(
     clusters.sort(key=lambda c: c.required_shelf_height, reverse=True)
 
     # Step 2: Prepare shelf tracking
-    shelf_remaining_width = {s.shelf_id: s.usable_width_mm for s in shelves}
-    shelf_books: dict[int, list[BookForOptimizer]] = {s.shelf_id: [] for s in shelves}
+    # Track front and back row widths separately for double-row shelves
+    shelf_remaining_front = {s.shelf_id: s.usable_width_mm for s in shelves}
+    shelf_remaining_back = {
+        s.shelf_id: (s.back_row_width_mm or s.usable_width_mm) if s.double_row else 0
+        for s in shelves
+    }
+    shelf_books_front: dict[int, list[BookForOptimizer]] = {s.shelf_id: [] for s in shelves}
+    shelf_books_back: dict[int, list[BookForOptimizer]] = {s.shelf_id: [] for s in shelves}
     suggested_heights: dict[int, float] = {}
     assignments: list[ShelfAssignment] = []
     unassigned: list[BookForOptimizer] = []
@@ -208,72 +218,117 @@ def optimize_shelves(
         cluster_books = list(cluster.books)  # Copy for consumption
 
         # Find all shelves that can accommodate this height
+        # A shelf has room if either front or back row has remaining width
         fitting_shelves = [
             s for s in available_shelves
-            if s.usable_height_mm >= required_height and shelf_remaining_width[s.shelf_id] > 0
+            if s.usable_height_mm >= required_height
+            and (shelf_remaining_front[s.shelf_id] > 0 or shelf_remaining_back[s.shelf_id] > 0)
         ]
 
         if not fitting_shelves:
             # Try adjustable shelves - suggest new height
-            adjustable = [s for s in available_shelves if s.adjustable and shelf_remaining_width[s.shelf_id] > 0]
+            adjustable = [
+                s for s in available_shelves
+                if s.adjustable
+                and (shelf_remaining_front[s.shelf_id] > 0 or shelf_remaining_back[s.shelf_id] > 0)
+            ]
             if adjustable:
                 fitting_shelves = adjustable
                 for s in adjustable:
                     suggested_heights[s.shelf_id] = required_height
 
         # Pack books into fitting shelves (first-fit decreasing width)
+        # Strategy: fill front rows first (visible), overflow to back rows
         for book in cluster_books:
             placed = False
-            # Prefer shelf with least remaining space that still fits (best-fit)
-            fitting_shelves.sort(key=lambda s: shelf_remaining_width[s.shelf_id])
+            # Prefer shelf with least remaining front space that still fits (best-fit)
+            fitting_shelves.sort(key=lambda s: shelf_remaining_front[s.shelf_id])
 
+            # Try front row first
             for shelf in fitting_shelves:
-                if shelf_remaining_width[shelf.shelf_id] >= book.width_mm:
-                    shelf_books[shelf.shelf_id].append(book)
-                    shelf_remaining_width[shelf.shelf_id] -= book.width_mm
+                if shelf_remaining_front[shelf.shelf_id] >= book.width_mm:
+                    shelf_books_front[shelf.shelf_id].append(book)
+                    shelf_remaining_front[shelf.shelf_id] -= book.width_mm
                     placed = True
                     break
+
+            # Try back row if front is full
+            if not placed:
+                fitting_shelves.sort(key=lambda s: shelf_remaining_back[s.shelf_id])
+                for shelf in fitting_shelves:
+                    if shelf_remaining_back[shelf.shelf_id] >= book.width_mm:
+                        shelf_books_back[shelf.shelf_id].append(book)
+                        shelf_remaining_back[shelf.shelf_id] -= book.width_mm
+                        placed = True
+                        break
 
             if not placed:
                 unassigned.append(book)
 
     # Step 4: Sort books within each shelf and generate assignments
     for shelf in shelves:
-        books_on_shelf = shelf_books[shelf.shelf_id]
-        if not books_on_shelf:
-            continue
+        # Front row
+        front_books = shelf_books_front[shelf.shelf_id]
+        if front_books:
+            sorted_front = _sort_books_on_shelf(front_books, sort_order)
+            for pos, book in enumerate(sorted_front, 1):
+                assignments.append(ShelfAssignment(
+                    copy_id=book.copy_id,
+                    shelf_id=shelf.shelf_id,
+                    position=pos,
+                    book_title=book.title,
+                    layer="front",
+                ))
 
-        sorted_books = _sort_books_on_shelf(books_on_shelf, sort_order)
-        for pos, book in enumerate(sorted_books, 1):
-            assignments.append(ShelfAssignment(
-                copy_id=book.copy_id,
-                shelf_id=shelf.shelf_id,
-                position=pos,
-                book_title=book.title,
-            ))
+        # Back row
+        back_books = shelf_books_back[shelf.shelf_id]
+        if back_books:
+            sorted_back = _sort_books_on_shelf(back_books, sort_order)
+            for pos, book in enumerate(sorted_back, 1):
+                assignments.append(ShelfAssignment(
+                    copy_id=book.copy_id,
+                    shelf_id=shelf.shelf_id,
+                    position=pos,
+                    book_title=book.title,
+                    layer="back",
+                ))
 
     # Step 5: Calculate utilization stats
     utilization = {}
     for shelf in shelves:
-        books_on_shelf = shelf_books[shelf.shelf_id]
-        if not books_on_shelf:
+        front_books = shelf_books_front[shelf.shelf_id]
+        back_books = shelf_books_back[shelf.shelf_id]
+        all_books = front_books + back_books
+        if not all_books:
+            total_width = shelf.usable_width_mm
+            if shelf.double_row:
+                total_width += (shelf.back_row_width_mm or shelf.usable_width_mm)
             utilization[shelf.shelf_id] = {
                 "books_count": 0,
+                "front_row_books": 0,
+                "back_row_books": 0,
                 "width_used_mm": 0,
-                "width_total_mm": shelf.usable_width_mm,
+                "width_total_mm": total_width,
                 "width_utilization_pct": 0,
                 "max_book_height_mm": 0,
                 "height_available_mm": shelf.usable_height_mm,
                 "height_wasted_mm": shelf.usable_height_mm,
             }
         else:
-            width_used = sum(b.width_mm for b in books_on_shelf)
-            max_height = max(b.height_mm for b in books_on_shelf)
+            front_width = sum(b.width_mm for b in front_books)
+            back_width = sum(b.width_mm for b in back_books)
+            width_used = front_width + back_width
+            total_width = shelf.usable_width_mm
+            if shelf.double_row:
+                total_width += (shelf.back_row_width_mm or shelf.usable_width_mm)
+            max_height = max(b.height_mm for b in all_books)
             utilization[shelf.shelf_id] = {
-                "books_count": len(books_on_shelf),
+                "books_count": len(all_books),
+                "front_row_books": len(front_books),
+                "back_row_books": len(back_books),
                 "width_used_mm": round(width_used, 1),
-                "width_total_mm": shelf.usable_width_mm,
-                "width_utilization_pct": round(width_used / shelf.usable_width_mm * 100, 1),
+                "width_total_mm": round(total_width, 1),
+                "width_utilization_pct": round(width_used / max(total_width, 1) * 100, 1),
                 "max_book_height_mm": round(max_height, 1),
                 "height_available_mm": shelf.usable_height_mm,
                 "height_wasted_mm": round(shelf.usable_height_mm - max_height - SHELF_MARGIN_MM, 1),

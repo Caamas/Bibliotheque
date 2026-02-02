@@ -47,6 +47,8 @@ class ShelfBase(BaseModel):
     usable_height_mm: float
     usable_width_mm: float
     usable_depth_mm: Optional[float] = None
+    double_row: bool = False  # Whether this shelf supports two rows of books
+    back_row_width_mm: Optional[float] = None  # Usable width for back row
 
 
 class ShelfCreate(ShelfBase):
@@ -59,6 +61,8 @@ class ShelfUpdate(BaseModel):
     usable_height_mm: Optional[float] = None
     usable_width_mm: Optional[float] = None
     usable_depth_mm: Optional[float] = None
+    double_row: Optional[bool] = None
+    back_row_width_mm: Optional[float] = None
 
 
 class ShelfResponse(ShelfBase):
@@ -66,6 +70,8 @@ class ShelfResponse(ShelfBase):
     bookcase_id: int
     photo: Optional[str] = None
     books_count: int = 0
+    front_row_books: int = 0
+    back_row_books: int = 0
     created_at: datetime
 
     class Config:
@@ -91,6 +97,7 @@ class ShelfAssignmentResponse(BaseModel):
     shelf_id: int
     position: int
     book_title: str
+    layer: str = "front"  # "front" or "back"
 
 
 class ClusterInfo(BaseModel):
@@ -105,6 +112,8 @@ class ClusterInfo(BaseModel):
 class ShelfUtilization(BaseModel):
     shelf_id: int
     books_count: int
+    front_row_books: int = 0
+    back_row_books: int = 0
     width_used_mm: float
     width_total_mm: float
     width_utilization_pct: float

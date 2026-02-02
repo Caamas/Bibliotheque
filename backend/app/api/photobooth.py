@@ -1,12 +1,15 @@
 """Photobooth API: process book photos for metadata extraction."""
 
 import logging
+import uuid
+from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, File, UploadFile, Depends, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config import settings
 from app.database import get_db
 from app.services.photobooth import process_book, PhotoboothResult
 from app.services.enrichment import (
@@ -15,6 +18,8 @@ from app.services.enrichment import (
     enrich_single_book,
 )
 from app.services.isbn_lookup import ISBNLookupService
+
+SIGNATURES_DIR = Path(settings.UPLOAD_DIR) / "signatures"
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/photobooth", tags=["photobooth"])
@@ -45,6 +50,9 @@ class PhotoboothResponse(BaseModel):
     api_cover_url: Optional[str] = None
     api_page_count: Optional[int] = None
     api_height_mm: Optional[float] = None
+    # Signature photo (if provided)
+    is_signed: bool = False
+    signature_photo_path: Optional[str] = None
 
 
 @router.post("/process", response_model=PhotoboothResponse)
@@ -52,13 +60,15 @@ async def process_photos(
     front: Optional[UploadFile] = File(None),
     back: Optional[UploadFile] = File(None),
     spine: Optional[UploadFile] = File(None),
+    signature: Optional[UploadFile] = File(None),
 ):
     """Process book photos taken on the calibration mat.
 
-    Upload 1-3 photos:
+    Upload 1-4 photos:
     - front: front cover (for title, author, dimensions)
     - back: back cover (for ISBN barcode)
     - spine: spine (for depth measurement, title confirmation)
+    - signature: photo of author's signature (optional, stored as-is)
 
     Returns extracted metadata with confidence scores.
     The client should present this for user confirmation before saving.
@@ -70,6 +80,17 @@ async def process_photos(
     front_data = await front.read() if front else None
     back_data = await back.read() if back else None
     spine_data = await spine.read() if spine else None
+
+    # Save signature photo if provided
+    signature_path = None
+    if signature:
+        SIGNATURES_DIR.mkdir(parents=True, exist_ok=True)
+        ext = Path(signature.filename or "sig.jpg").suffix or ".jpg"
+        sig_filename = f"{uuid.uuid4().hex}{ext}"
+        sig_path = SIGNATURES_DIR / sig_filename
+        sig_data = await signature.read()
+        sig_path.write_bytes(sig_data)
+        signature_path = f"signatures/{sig_filename}"
 
     # Process through the photobooth pipeline
     result = process_book(front_data, back_data, spine_data)
@@ -90,6 +111,8 @@ async def process_photos(
         front_raw_text=result.front_ocr.raw_text if result.front_ocr else None,
         back_raw_text=result.back_ocr.raw_text if result.back_ocr else None,
         spine_raw_text=result.spine_ocr.raw_text if result.spine_ocr else None,
+        is_signed=signature_path is not None,
+        signature_photo_path=signature_path,
     )
 
     # If we got an ISBN, try to enrich from APIs

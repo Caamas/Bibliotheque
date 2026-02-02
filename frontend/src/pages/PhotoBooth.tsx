@@ -3,13 +3,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Camera, RotateCcw, Check, AlertTriangle, BookOpen, ChevronRight, Upload, Loader2 } from 'lucide-react'
 import { api } from '../services/api'
 
-type PhotoStep = 'back' | 'front' | 'spine'
+type PhotoStep = 'back' | 'front' | 'spine' | 'signature'
 type CaptureMethod = 'camera' | 'upload'
 
-const STEPS: { key: PhotoStep; label: string; description: string }[] = [
+const STEPS: { key: PhotoStep; label: string; description: string; optional?: boolean }[] = [
   { key: 'back', label: 'Back Cover', description: 'Place book face-down on the mat. ISBN barcode must be visible.' },
   { key: 'front', label: 'Front Cover', description: 'Flip book face-up on the mat. All 4 markers must be visible.' },
   { key: 'spine', label: 'Spine', description: 'Lay book on its side, spine facing up. Markers must be visible.' },
+  { key: 'signature', label: 'Signature', description: 'If the book is signed by the author, photograph the signature page. Skip if not signed.', optional: true },
 ]
 
 interface PhotoboothResult {
@@ -34,14 +35,16 @@ interface PhotoboothResult {
   api_cover_url: string | null
   api_page_count: number | null
   api_height_mm: number | null
+  is_signed: boolean
+  signature_photo_path: string | null
 }
 
 export default function PhotoBooth() {
   const queryClient = useQueryClient()
   const [captureMethod, setCaptureMethod] = useState<CaptureMethod>('camera')
   const [currentStep, setCurrentStep] = useState(0)
-  const [photos, setPhotos] = useState<Record<PhotoStep, Blob | null>>({ back: null, front: null, spine: null })
-  const [previews, setPreviews] = useState<Record<PhotoStep, string | null>>({ back: null, front: null, spine: null })
+  const [photos, setPhotos] = useState<Record<PhotoStep, Blob | null>>({ back: null, front: null, spine: null, signature: null })
+  const [previews, setPreviews] = useState<Record<PhotoStep, string | null>>({ back: null, front: null, spine: null, signature: null })
   const [result, setResult] = useState<PhotoboothResult | null>(null)
   const [editData, setEditData] = useState<Record<string, string>>({})
 
@@ -56,6 +59,7 @@ export default function PhotoBooth() {
       if (photos.front) formData.append('front', photos.front, 'front.jpg')
       if (photos.back) formData.append('back', photos.back, 'back.jpg')
       if (photos.spine) formData.append('spine', photos.spine, 'spine.jpg')
+      if (photos.signature) formData.append('signature', photos.signature, 'signature.jpg')
       return api.processPhotobooth(formData)
     },
     onSuccess: (data: PhotoboothResult) => {
@@ -72,6 +76,8 @@ export default function PhotoBooth() {
         page_count: String(data.api_page_count || ''),
         description: data.api_description || '',
         cover_url: data.api_cover_url || '',
+        is_signed: data.is_signed ? 'true' : 'false',
+        signature_photo_path: data.signature_photo_path || '',
       })
     },
   })
@@ -162,8 +168,8 @@ export default function PhotoBooth() {
   const resetAll = () => {
     stopCamera()
     setCurrentStep(0)
-    setPhotos({ back: null, front: null, spine: null })
-    setPreviews({ back: null, front: null, spine: null })
+    setPhotos({ back: null, front: null, spine: null, signature: null })
+    setPreviews({ back: null, front: null, spine: null, signature: null })
     setResult(null)
     setEditData({})
   }
@@ -222,6 +228,16 @@ export default function PhotoBooth() {
 
           <Field label="Pages" value={editData.page_count} onChange={v => setEditData(d => ({ ...d, page_count: v }))} type="number" />
           <Field label="Description" value={editData.description} onChange={v => setEditData(d => ({ ...d, description: v }))} multiline />
+
+          {/* Signature */}
+          {editData.is_signed === 'true' && (
+            <div className="bg-amber-900/20 border border-amber-700 rounded-lg p-3">
+              <p className="text-sm text-amber-300 font-medium mb-2">Signed copy</p>
+              {previews.signature && (
+                <img src={previews.signature} alt="Signature" className="h-24 rounded" />
+              )}
+            </div>
+          )}
         </div>
 
         {/* OCR debug (collapsible) */}
@@ -292,7 +308,7 @@ export default function PhotoBooth() {
               {i < currentStep ? <Check size={16} /> : i + 1}
             </div>
             <span className={`ml-1 text-xs ${i === currentStep ? 'text-white' : 'text-slate-500'}`}>
-              {s.label}
+              {s.label}{s.optional ? '*' : ''}
             </span>
             {i < STEPS.length - 1 && <ChevronRight size={14} className="mx-1 text-slate-600" />}
           </div>

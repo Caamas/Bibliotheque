@@ -16,6 +16,15 @@ class StorageType(str, enum.Enum):
     LONG_TERM = "long_term"
 
 
+class ShelfLayer(str, enum.Enum):
+    """Which layer on a deep shelf the book is stored in.
+
+    Deep shelves may hold two rows of books (front and back).
+    """
+    FRONT = "front"
+    BACK = "back"
+
+
 class AwardStatus(str, enum.Enum):
     NOMINATED = "nominated"
     SHORTLISTED = "shortlisted"
@@ -77,6 +86,9 @@ class BookCopy(Base):
     )
     shelf_id: Mapped[Optional[int]] = mapped_column(ForeignKey("shelves.id"))
     shelf_position: Mapped[Optional[int]] = mapped_column(Integer)
+    shelf_layer: Mapped[Optional[ShelfLayer]] = mapped_column(
+        Enum(ShelfLayer), default=ShelfLayer.FRONT
+    )  # front or back row on deep shelves
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(
